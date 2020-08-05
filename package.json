@@ -1,0 +1,34 @@
+{
+  "name": "@biothings-explorer/explain",
+  "version": "1.0.11",
+  "description": "NodeJS module to provide explanation about how two biomedical concepts are connected",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevinxin90/explain.js.git"
+  },
+  "keywords": [
+    "explain",
+    "biothings",
+    "explorer"
+  ],
+  "author": "jiwen xin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevinxin90/explain.js/issues"
+  },
+  "homepage": "https://github.com/kevinxin90/explain.js#readme",
+  "devDependencies": {
+    "coveralls": "^3.1.0",
+    "jest": "^26.1.0"
+  },
+  "dependencies": {
+    "@biothings-explorer/call-apis": "^1.0.5",
+    "@biothings-explorer/smartapi-kg": "^1.1.10",
+    "biomedical_id_resolver": "^1.0.8"
+  }
+}
