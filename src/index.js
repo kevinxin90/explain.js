@@ -12,7 +12,7 @@ module.exports = class {
      */
     constructor() {
         this.meta_kg = new kg();
-        this.meta_kg.constructMetaKGSync(tag = "biothings");
+        this.meta_kg.constructMetaKGSync("biothings");
         this.logs = [];
     }
 
