@@ -171,6 +171,7 @@ module.exports = class {
                     };
                     resolved_ids[left_res.$original_input[left_res.$input].obj.primary.value] = left_res.$original_input[left_res.$input].obj;
                     resolved_ids[right_res.$original_input[right_res.$input].obj.primary.value] = right_res.$original_input[right_res.$input].obj;
+                    resolved_ids[left_res.$output_id_mapping.resolved.id.identifier] = left_res.$output_id_mapping.resolved.db_ids;
                     result.push(tmp);
                 })
             })
