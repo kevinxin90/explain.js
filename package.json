@@ -1,6 +1,6 @@
 {
   "name": "@biothings-explorer/explain",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "NodeJS module to provide explanation about how two biomedical concepts are connected",
   "main": "src/index.js",
   "scripts": {
