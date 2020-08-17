@@ -156,7 +156,7 @@ module.exports = class {
                     }
                     let tmp = {
                         input_id: left_res.$original_input[left_res.$input].obj.primary.value,
-                        input_name: input_name,
+                        input_label: input_name,
                         pred1: left_res.$association.predicate,
                         pred1_api: left_res.$association.api_name,
                         pred1_publications: left_res.publications,
