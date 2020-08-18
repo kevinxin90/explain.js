@@ -125,6 +125,10 @@ module.exports = class {
         return res;
     }
 
+    /**
+     * Group results based on query direction and output id
+     * @param {array} res - response from call_apis module
+     */
     groupResultByDirectionAndOutput(res) {
         let grp_res = { left: {}, right: {} };
         res.map(item => {
