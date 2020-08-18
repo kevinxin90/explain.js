@@ -25,7 +25,14 @@ module.exports = class {
     async query(inputs, outputs, intermediate = undefined) {
         let edges = this.findEdges(inputs, outputs, intermediate);
         if (edges === null) {
-            return null;
+            this.logs.push("No edges found connecting from start nodes to end nodes through intermediate nodes")
+            return {
+                data: {
+                    result: [],
+                    resolved_ids: {}
+                },
+                log: this.logs
+            };
         }
         let left_annotated_edges = [], right_annotated_edges = [];
         this.logs.push(`Start to find bte edges connecting from start nodes to intermediate nodes`);
@@ -36,7 +43,13 @@ module.exports = class {
         })
         if (left_annotated_edges.length === 0) {
             this.logs.push('No bte edges found connecting from start nodes to intermediate nodes, thus the query ends');
-            return null;
+            return {
+                data: {
+                    result: [],
+                    resolved_ids: {}
+                },
+                log: this.logs
+            };
         };
         this.logs.push(`Start to find bte edges connecting from end nodes to intermediate nodes`)
         Object.keys(edges.right).map(i => {
@@ -46,7 +59,13 @@ module.exports = class {
         });
         if (right_annotated_edges.length === 0) {
             this.logs.push('No bte edges found connecting from end nodes to intermediate nodes, thus the query ends');
-            return null;
+            return {
+                data: {
+                    result: [],
+                    resolved_ids: {}
+                },
+                log: this.logs
+            };
         }
         let annotated_edges = [...left_annotated_edges, ...right_annotated_edges];
         let caller = new call_apis(annotated_edges);
