@@ -11,6 +11,7 @@ module.exports = class {
      * Load Meta-KG containing BioThings APIs only.
      */
     constructor() {
+        this.d = new Date();
         this.meta_kg = new kg();
         this.meta_kg.constructMetaKGSync("biothings");
         this.logs = [];
@@ -22,17 +23,30 @@ module.exports = class {
      * @param {object} output - The output biomedical concpet
      * @param {array|undefined} intermediate - intermediate semantic types connecting input and output; if undefined, refer to all semantic types
      */
-    async query(input, output, intermediate = undefined) {
-        let edges = this.findEdges(input, output, intermediate);
+    async query(inputs, outputs, intermediate = undefined) {
+        let edges = this.findEdges(inputs, outputs, intermediate);
         if (edges === null) {
             return null;
         }
-        let left_annotated_edges = this.annotateEdgesWithInputID(edges.left, input, 'left');
+        let left_annotated_edges = [], right_annotated_edges = [];
+        this.logs.push(`Start to find bte edges connecting from start nodes to intermediate nodes`);
+        Object.keys(edges.left).map(i => {
+            let tmp_edges = this.annotateEdgesWithInputID(edges.left[i], inputs[i], 'left');
+            this.logs.push(`Find ${tmp_edges.length} bte edges connecting from ${inputs[i].primary.value} to ${intermediate || "All"} nodes`)
+            left_annotated_edges = [...left_annotated_edges, ...tmp_edges];
+        })
         if (left_annotated_edges.length === 0) {
+            this.logs.push('No bte edges found connecting from start nodes to intermediate nodes, thus the query ends');
             return null;
-        }
-        let right_annotated_edges = this.annotateEdgesWithInputID(edges.right, output, 'right');
+        };
+        this.logs.push(`Start to find bte edges connecting from end nodes to intermediate nodes`)
+        Object.keys(edges.right).map(i => {
+            let tmp_edges = this.annotateEdgesWithInputID(edges.right[i], outputs[i], 'right');
+            this.logs.push(`Find ${tmp_edges.length} bte edges connecting from ${outputs[i].primary.value} to ${intermediate || "All"} nodes`)
+            right_annotated_edges = [...right_annotated_edges, ...tmp_edges];
+        });
         if (right_annotated_edges.length === 0) {
+            this.logs.push('No bte edges found connecting from end nodes to intermediate nodes, thus the query ends');
             return null;
         }
         let annotated_edges = [...left_annotated_edges, ...right_annotated_edges];
@@ -52,26 +66,27 @@ module.exports = class {
      * @param {object} output - The output biomedical concpet
      * @param {array|undefined} intermediate - intermediate semantic types connecting input and output; if undefined, refer to all semantic types
      */
-    findEdges(input, output, intermediate) {
-        let left_edges = this.meta_kg.filter(
-            {
-                input_type: input.type,
-                output_type: intermediate
-            }
-        )
-        if (!(Array.isArray(left_edges)) || left_edges.length === 0) {
+    findEdges(inputs, outputs, intermediate) {
+        let left_edges = {}, right_edges = {};
+        if (!(Array.isArray(inputs)) || !(Array.isArray(outputs)) || inputs.length === 0 || outputs.length === 0) {
             return null;
         }
-
-        let right_edges = this.meta_kg.filter(
-            {
-                input_type: output.type,
-                output_type: intermediate
-            }
-        )
-        if (!(Array.isArray(right_edges)) || right_edges.length === 0) {
-            return null;
-        }
+        inputs.map((input, i) => {
+            left_edges[i] = this.meta_kg.filter(
+                {
+                    input_type: input.type,
+                    output_type: intermediate
+                }
+            )
+        })
+        outputs.map((output, i) => {
+            right_edges[i] = this.meta_kg.filter(
+                {
+                    input_type: output.type,
+                    output_type: intermediate
+                }
+            )
+        })
         return {
             left: left_edges,
             right: right_edges
@@ -176,6 +191,7 @@ module.exports = class {
                 })
             })
         })
+        this.logs.push(`${this.d.toUTCString()} [Query Result]: Found ${result.length} unique paths connecting from start nodes to end nodes`)
         return { result, resolved_ids };
     }
 
