@@ -113,4 +113,52 @@ describe("test main explain function", () => {
         expect(res).toHaveLength(2);
     })
 
+    test("test groupResultByDirectionAndOutput function", () => {
+        const res = [
+            {
+                $input: "UMLS:C0935989",
+                $original_input: {
+                    "UMLS:C0935989": {
+                        obj: 1,
+                        source: "left"
+                    }
+                },
+                $output: "LKK:123"
+            },
+            {
+                $input: "CHEBI:901",
+                $original_input: {
+                    "CHEBI:901": {
+                        obj: 1,
+                        source: "right"
+                    }
+                },
+                $output: "LKK:999"
+            },
+            {
+                $input: "CHEBI:901",
+                $original_input: {
+                    "CHEBI:901": {
+                        obj: 1,
+                        source: "right"
+                    }
+                },
+                $output: "LKK:999"
+            },
+            {
+                $input: "UMLS:C0935989",
+                $original_input: {
+                    "UMLS:C0935989": {
+                        obj: 1,
+                        source: "left"
+                    }
+                },
+                $output: "LKK:999"
+            },
+        ]
+        let result = query.groupResultByDirectionAndOutput(res);
+        expect(result).toHaveProperty('left');
+        expect(Object.keys(result.left)).toHaveLength(2);
+        expect(result.right["LKK:999"]).toHaveLength(2);
+    })
 })
