@@ -234,4 +234,31 @@ describe("test main explain function", () => {
         expect(res.data).toHaveProperty("resolved_ids");
         expect(res.data.result.filter(item => item.input_label === "DASATINIB").length).toBeGreaterThan(0)
     })
+
+    test("test explain main function if no connection found", async () => {
+        let res = await query.query([INPUT2], [OUTPUT1], ['Gene']);
+        expect(res).toHaveProperty("log");
+        expect(res).toHaveProperty("data");
+        expect(res.data).toHaveProperty("result");
+        expect(res.data).toHaveProperty("resolved_ids");
+        expect(res.data.result).toHaveLength(0);
+    })
+
+    test("test explain main function if no connection found reverse", async () => {
+        let res = await query.query([OUTPUT1], [INPUT2], ['Gene']);
+        expect(res).toHaveProperty("log");
+        expect(res).toHaveProperty("data");
+        expect(res.data).toHaveProperty("result");
+        expect(res.data).toHaveProperty("resolved_ids");
+        expect(res.data.result).toHaveLength(0);
+    })
+
+    test("test explain main function if no edges found", async () => {
+        let res = await query.query([OUTPUT1], [INPUT2], ['Gene1']);
+        expect(res).toHaveProperty("log");
+        expect(res).toHaveProperty("data");
+        expect(res.data).toHaveProperty("result");
+        expect(res.data).toHaveProperty("resolved_ids");
+        expect(res.data.result).toHaveLength(0);
+    })
 })
