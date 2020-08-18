@@ -31,6 +31,24 @@ const INPUT2 = {
     "type": "ChemicalSubstance"
 }
 
+const INPUT3 = {
+    "CHEMBL.COMPOUND": "CHEMBL1421",
+    "DRUGBANK": "DB01254",
+    "PUBCHEM": 3062316,
+    "CHEBI": "CHEBI:49375",
+    "UMLS": "C1455147",
+    "MESH": "D000069439",
+    "UNII": "RBZ1571X5H",
+    "name": "DASATINIB",
+    "primary": {
+        "identifier": "CHEBI",
+        "cls": "ChemicalSubstance",
+        "value": "CHEBI:49375"
+    },
+    "display": "CHEBI(CHEBI:49375) CHEMBL.COMPOUND(CHEMBL1421) DRUGBANK(DB01254) PUBCHEM(3062316) MESH(D000069439) UNII(RBZ1571X5H) UMLS(C1455147) name(DASATINIB)",
+    "type": "ChemicalSubstance"
+}
+
 const OUTPUT1 = {
     "MONDO": "MONDO:0011996",
     "DOID": "DOID:8552",
@@ -198,5 +216,22 @@ describe("test main explain function", () => {
         }
         result = query.findIntersections(res2);
         expect(result).toHaveLength(0);
+    })
+
+    test("test explain main function using single input and output", async () => {
+        let res = await query.query([INPUT1], [OUTPUT1], ['Gene']);
+        expect(res).toHaveProperty("log");
+        expect(res).toHaveProperty("data");
+        expect(res.data).toHaveProperty("result");
+        expect(res.data).toHaveProperty("resolved_ids")
+    });
+
+    test("test explain main function using multiple input and output", async () => {
+        let res = await query.query([INPUT1, INPUT3], [OUTPUT1], ['Gene']);
+        expect(res).toHaveProperty("log");
+        expect(res).toHaveProperty("data");
+        expect(res.data).toHaveProperty("result");
+        expect(res.data).toHaveProperty("resolved_ids");
+        expect(res.data.result.filter(item => item.input_label === "DASATINIB").length).toBeGreaterThan(0)
     })
 })
