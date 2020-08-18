@@ -161,4 +161,42 @@ describe("test main explain function", () => {
         expect(Object.keys(result.left)).toHaveLength(2);
         expect(result.right["LKK:999"]).toHaveLength(2);
     })
+
+    test("test findIntersection function", () => {
+        let res = {
+            left: {
+                'mls': 1,
+                'kkk': 2
+            },
+            right: {
+                'mls': 4,
+                'jj': 2
+            }
+        }
+        let result = query.findIntersections(res);
+        expect(result).toHaveLength(1);
+        expect(result[0]).toBe("mls");
+        let res1 = {
+            left: {
+                'mls': 1,
+                'kkk': 2
+            },
+            right: {
+                'ms': 4,
+                'jj': 2
+            }
+        }
+        result = query.findIntersections(res1);
+        expect(result).toHaveLength(0);
+        let res2 = {
+            left: {
+                'mls': 1,
+                'kkk': 2
+            },
+            right: {
+            }
+        }
+        result = query.findIntersections(res2);
+        expect(result).toHaveLength(0);
+    })
 })
