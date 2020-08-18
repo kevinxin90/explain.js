@@ -1,5 +1,4 @@
 const kg = require("@biothings-explorer/smartapi-kg");
-const resolver = require("biomedical_id_resolver");
 const call_apis = require("@biothings-explorer/call-apis");
 const config = require("./config");
 
