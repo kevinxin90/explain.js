@@ -194,6 +194,7 @@ module.exports = class {
                     let tmp = {
                         input_id: left_res.$original_input[left_res.$input].obj.primary.value,
                         input_label: input_name,
+                        input_type: left_res.$original_input[left_res.$input].obj.primary.cls,
                         pred1: left_res.$association.predicate,
                         pred1_api: left_res.$association.api_name,
                         pred1_publications: left_res.publications,
@@ -204,7 +205,8 @@ module.exports = class {
                         pred2_api: right_res.$association.api_name,
                         pred2_publications: right_res.publications,
                         output_id: right_res.$original_input[right_res.$input].obj.primary.value,
-                        output_label: output_name
+                        output_label: output_name,
+                        output_type: right_res.$original_input[right_res.$input].obj.primary.cls
                     };
                     resolved_ids[left_res.$original_input[left_res.$input].obj.primary.value] = left_res.$original_input[left_res.$input].obj;
                     resolved_ids[right_res.$original_input[right_res.$input].obj.primary.value] = right_res.$original_input[right_res.$input].obj;
